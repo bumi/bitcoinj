@@ -133,7 +133,7 @@ public class DeterministicSeed implements EncryptableItem {
             return "DeterministicSeed [encrypted]";
         else
             return "DeterministicSeed " + toHexString() +
-                    ((mnemonicCode != null) ? " " + Joiner.on(" ").join(mnemonicCode) : "");
+                    ((mnemonicCode != null) ? " " + getMnemonicCodeAsString() : "");
     }
 
     /** Returns the seed as hex or null if encrypted. */
@@ -180,7 +180,7 @@ public class DeterministicSeed implements EncryptableItem {
     }
 
     private byte[] getMnemonicAsBytes() {
-        return Joiner.on(" ").join(mnemonicCode).getBytes(Charsets.UTF_8);
+        return getMnemonicCodeAsString().getBytes(Charsets.UTF_8);
     }
 
     public DeterministicSeed decrypt(KeyCrypter crypter, String passphrase, KeyParameter aesKey) {
@@ -240,6 +240,12 @@ public class DeterministicSeed implements EncryptableItem {
     @Nullable
     public List<String> getMnemonicCode() {
         return mnemonicCode;
+    }
+    
+    /** Get the mnemonic code as string or null if unknown */
+    @Nullable
+    public String getMnemonicCodeAsString() {
+    	return (mnemonicCode != null) ? Joiner.on(" ").join(mnemonicCode) : null;
     }
 
     private static List<String> decodeMnemonicCode(byte[] mnemonicCode) throws UnreadableWalletException {
